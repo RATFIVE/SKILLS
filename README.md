@@ -14,12 +14,13 @@ npx skills@latest add marcobanzhaf/SKILLS
 
 Code-zentrierte Skills für tägliche Entwicklungsarbeit.
 
-*(Noch keine Skills — Platzhalter für zukünftige Engineering-Skills)*
+- **[gh-issues-batch](skills/engineering/gh-issues-batch/SKILL.md)** — Alle offenen GitHub Issues in einem Rutsch implementieren: parallele Subagents, TDD, Playwright-Verifikation, Caveman-Simplification.
 
 ### Productivity
 
 Allgemeine Workflow-Tools, nicht code-spezifisch.
 
+- **[notes-to-issues](skills/productivity/notes-to-issues/SKILL.md)** — Roh-Aufgaben aus `notes.md` durch `/grill-with-docs` → `/to-prd` → `/to-issue` Pipeline zu GitHub Issues verarbeiten.
 - **[write-a-skill](skills/productivity/write-a-skill/SKILL.md)** — Neue Skills mit korrekter Struktur, progressive disclosure und gebündelten Ressourcen erstellen.
 
 ## Struktur
