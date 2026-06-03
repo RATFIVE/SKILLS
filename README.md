@@ -1,6 +1,6 @@
 # Skills
 
-Skills für opencode — eigene Skills und Referenz-Skills.
+Eigene Skills für Claude, opencode und andere Coding-Agents.
 
 ## Installation
 
