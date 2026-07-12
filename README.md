@@ -28,7 +28,8 @@ Skills für die jährliche Steuererklärung: Dokumentenarchive pflegen und Trans
 
 - **[steuer-dokument-einsortieren](skills/steuer/steuer-dokument-einsortieren/SKILL.md)** — Lose/generisch benannte PDFs (Behörden-, Arbeitgeber-, Versicherungspost) lesen, nach `Datum_Absender_Betreff.pdf` umbenennen und in den passenden Institutions-Ordner einsortieren.
 - **[steuer-transaktionen-kategorisieren](skills/steuer/steuer-transaktionen-kategorisieren/SKILL.md)** — Transaktionsexport (PayPal, Kontoauszug, …) steuerlich kategorisieren; eindeutige Buchungen automatisch, unklare Positionen einzeln per `grilling` mit dem User klären.
-- **[steuer-index-aktualisieren](skills/steuer/steuer-index-aktualisieren/SKILL.md)** — `index.md`-Übersicht eines Dokumentenarchivs diff-basiert aktuell halten; wird von den beiden anderen Steuer-Skills aufgerufen.
+- **[steuer-soul-pflegen](skills/steuer/steuer-soul-pflegen/SKILL.md)** — `SOUL.md` mit allen für die Steuererklärung relevanten persönlichen Lebensumständen erstellen/aktualisieren; ableitbare Fakten aus dem Archiv, den Rest per `grilling` erfragen.
+- **[steuer-index-aktualisieren](skills/steuer/steuer-index-aktualisieren/SKILL.md)** — `index.md`-Übersicht eines Dokumentenarchivs diff-basiert aktuell halten; wird von den anderen Steuer-Skills aufgerufen.
 
 ## Struktur
 
@@ -44,6 +45,8 @@ skills/
     ├── steuer-dokument-einsortieren/
     │   └── SKILL.md
     ├── steuer-transaktionen-kategorisieren/
+    │   └── SKILL.md
+    ├── steuer-soul-pflegen/
     │   └── SKILL.md
     └── steuer-index-aktualisieren/
         └── SKILL.md
