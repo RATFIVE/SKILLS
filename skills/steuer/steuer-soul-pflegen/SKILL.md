@@ -7,13 +7,23 @@ description: Erstellt oder aktualisiert eine `SOUL.md` im Archiv-Root, die alle 
 
 ## Overview
 
-`SOUL.md` ist das Gegenstück zu `index.md`: Während `index.md` beschreibt,
+`SOUL.md` ist das Gegenstück zu `INDEX.md`: Während `INDEX.md` beschreibt,
 welche Dokumente wo liegen, beschreibt `SOUL.md`, wer der Nutzer steuerlich
 ist — Lebensumstände, die sich teils aus den Dokumenten ablesen lassen
 (Arbeitgeber, Beschäftigungszeiträume, Konfession, Adresse), teils nur der
 Nutzer selbst kennt (Familienstand, Studienverlauf, Kleinunternehmerregelung,
 Pendelstrecke, weitere Sonderausgaben). Der Skill kombiniert beides:
 Archiv-Recherche für ableitbare Fakten, `grilling` für den Rest.
+
+`SOUL.md` gilt **jahresübergreifend** und liegt im Archiv-Root, nicht im
+Jahresordner. Jeder Fakt trägt deshalb seinen **Zeitraum** („GEOMAR seit
+03/2025", „Studium bis 09/2024") statt als Momentaufnahme dazustehen — nur so
+kann `steuer-struktur-anlegen` entscheiden, ob ein Lebensumstand im Steuerjahr
+2025 überhaupt schon galt.
+
+`SOUL.md` ist die Grundlage für `steuer-struktur-anlegen`: Jeder Fakt hier
+entscheidet über eine Anlage dort. Eine Lücke in `SOUL.md` wird später zu einer
+fehlenden Anlage — deshalb im Zweifel lieber eine Frage zu viel stellen.
 
 ## Bestehenden Stand einlesen
 
@@ -27,7 +37,7 @@ Archiv-Recherche für ableitbare Fakten, `grilling` für den Rest.
 
 ## Workflow
 
-1. **Archiv nach ableitbaren Fakten durchsuchen.** `index.md` lesen (nicht
+1. **Archiv nach ableitbaren Fakten durchsuchen.** `INDEX.md` lesen (nicht
    raten), dann gezielt die Dokumenttypen öffnen, die typischerweise diese
    Fakten tragen: Lohnsteuerbescheinigungen/Entgeltabrechnungen (Arbeitgeber,
    Beschäftigungszeitraum, Konfession/Kirchensteuermerkmal, Steuerklasse,
@@ -49,13 +59,19 @@ Archiv-Recherche für ableitbare Fakten, `grilling` für den Rest.
 4. **`SOUL.md` schreiben oder patchen.** Abschnitte: Persönliches Profil,
    Studium/Ausbildung, Beschäftigungsverhältnisse, ggf. Gewerbe,
    Krankenversicherung, Kapitalerträge, Sonderausgaben/außergewöhnliche
-   Belastungen, Offene Punkte. Jede Aussage wo möglich mit einem relativen
-   Pfad auf die Belegdatei versehen. Bei Folgeläufen gezielt patchen statt
-   komplett neu zu schreiben (Full-Rewrite nur, wenn `SOUL.md` noch nicht
-   existiert oder sichtbar veraltet/driftet).
+   Belastungen, Offene Punkte. Jeder Fakt bekommt einen **Zeitraum** (ab/bis)
+   und wo möglich einen relativen Pfad auf die Belegdatei. Bei Folgeläufen
+   gezielt patchen statt komplett neu zu schreiben (Full-Rewrite nur, wenn
+   `SOUL.md` noch nicht existiert oder sichtbar veraltet/driftet). Ein
+   weggefallener Lebensumstand wird **nicht gelöscht**, sondern mit Enddatum
+   versehen — die Vorjahre brauchen ihn noch.
 5. **`steuer-index-aktualisieren` aufrufen**, wenn `SOUL.md` neu angelegt
-   wurde (neuer Eintrag in `index.md` nötig). Bei reinem Inhalts-Update einer
+   wurde (neuer Eintrag in `INDEX.md` nötig). Bei reinem Inhalts-Update einer
    bereits gelisteten `SOUL.md` ohne Struktur-Änderung nicht nötig.
+6. **Hat sich ein strukturrelevanter Fakt geändert** (neues Gewerbe, Studium
+   beendet, Depot eröffnet), im Abschlussbericht darauf hinweisen, dass
+   `steuer-struktur-anlegen` für die betroffenen Jahre nachziehen sollte — die
+   Anlagen-Ordner ändern sich dadurch.
 
 ## Als Frage-Ressource für andere Skills
 
@@ -89,3 +105,6 @@ werden.
   entsteht.
 - **NICHT** Aussagen ohne Belegverweis stehen lassen, wenn ein Beleg im
   Archiv existiert.
+- **NICHT** Fakten ohne Zeitraum notieren — ohne ab/bis ist nicht entscheidbar,
+  für welches Steuerjahr sie gelten.
+- **NICHT** überholte Fakten löschen. Enddatum setzen; die Vorjahre brauchen sie.

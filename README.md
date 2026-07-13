@@ -24,12 +24,30 @@ Allgemeine Workflow-Tools, nicht code-spezifisch.
 
 ### Steuer
 
-Skills für die jährliche Steuererklärung: Dokumentenarchive pflegen und Transaktionen steuerlich einordnen.
+Eine zusammenhängende Suite, die ein Steuer-Dokumentenarchiv von Null aufbaut und pflegt: Personenprofil erheben → daraus die nötigen Steuer-Anlagen ableiten → Dokumente einsortieren → Summen mit Belegverweis ziehen.
 
-- **[steuer-dokument-einsortieren](skills/steuer/steuer-dokument-einsortieren/SKILL.md)** — Lose/generisch benannte PDFs (Behörden-, Arbeitgeber-, Versicherungspost) lesen, nach `Datum_Absender_Betreff.pdf` umbenennen und in den passenden Institutions-Ordner einsortieren.
+Einstiegspunkt ist **`steuer-init`**; die übrigen Skills rufen sich gegenseitig auf.
+
+```
+/steuer-init
+  ├─ steuer-soul-pflegen        → SOUL.md    (wer bin ich steuerlich?)
+  ├─ steuer-struktur-anlegen    → <Jahr>/NN_Anlage_*/   (welche Anlagen brauche ich?)
+  └─ steuer-index-aktualisieren → INDEX.md
+
+/steuer-dokument-einsortieren   → sortiert raw/ in die Anlagen
+  ├─ steuer-uebersicht          → _UEBERSICHT.md (Summen mit Beleg)
+  └─ steuer-index-aktualisieren → INDEX.md
+```
+
+- **[steuer-init](skills/steuer/steuer-init/SKILL.md)** — Einstiegspunkt für ein neues Archiv: schreibt die `CLAUDE.md` mit der Archiv-Konvention und fährt die Kette aus Profil, Struktur und Index an.
+- **[steuer-soul-pflegen](skills/steuer/steuer-soul-pflegen/SKILL.md)** — `SOUL.md` mit allen für die Steuererklärung relevanten persönlichen Lebensumständen (jahresübergreifend, mit Zeiträumen) erstellen/aktualisieren; ableitbare Fakten aus dem Archiv, den Rest per `grilling` erfragen.
+- **[steuer-struktur-anlegen](skills/steuer/steuer-struktur-anlegen/SKILL.md)** — Leitet aus `SOUL.md` ab, welche Anlagen (N, S, KAP, Vorsorgeaufwand, …) tatsächlich gebraucht werden, und legt die Jahres-/Anlagen-Ordner an. Das Mapping „Lebensumstand → Anlage" steht in seiner [REFERENCE.md](skills/steuer/steuer-struktur-anlegen/REFERENCE.md).
+- **[steuer-dokument-einsortieren](skills/steuer/steuer-dokument-einsortieren/SKILL.md)** — Lose/generisch benannte PDFs lesen, nach `Datum_Absender_Betreff.pdf` umbenennen und in die passende Anlage des richtigen Steuerjahres einsortieren; Dokumente mit Mehrfach-Anlagenbezug nach `00_Quellen/`, ohne sie zu duplizieren.
 - **[steuer-transaktionen-kategorisieren](skills/steuer/steuer-transaktionen-kategorisieren/SKILL.md)** — Transaktionsexport (PayPal, Kontoauszug, …) steuerlich kategorisieren; eindeutige Buchungen automatisch, unklare Positionen einzeln per `grilling` mit dem User klären.
-- **[steuer-soul-pflegen](skills/steuer/steuer-soul-pflegen/SKILL.md)** — `SOUL.md` mit allen für die Steuererklärung relevanten persönlichen Lebensumständen erstellen/aktualisieren; ableitbare Fakten aus dem Archiv, den Rest per `grilling` erfragen.
-- **[steuer-index-aktualisieren](skills/steuer/steuer-index-aktualisieren/SKILL.md)** — `index.md`-Übersicht eines Dokumentenarchivs diff-basiert aktuell halten; wird von den anderen Steuer-Skills aufgerufen.
+- **[steuer-uebersicht](skills/steuer/steuer-uebersicht/SKILL.md)** — `_UEBERSICHT.md` pro Anlage: die Beträge aus den Belegen, jeweils mit Datei und Seite als Herkunft, plus Summen pro Kategorie. Nicht sicher Lesbares wird `OFFEN` markiert statt geraten.
+- **[steuer-index-aktualisieren](skills/steuer/steuer-index-aktualisieren/SKILL.md)** — `INDEX.md`-Übersicht eines Dokumentenarchivs diff-basiert aktuell halten; wird von den anderen Steuer-Skills aufgerufen.
+
+> Vorsortierung, keine steuerliche Beratung.
 
 ## Struktur
 
@@ -41,12 +59,19 @@ skills/
 ├── productivity/       # Allgemeine Workflow-Tools
 │   └── notes-to-issues/
 │       └── SKILL.md
-└── steuer/             # Steuererklärung: Dokumente & Transaktionen
+└── steuer/             # Steuererklärung: Archiv aufbauen, Dokumente, Summen
+    ├── steuer-init/
+    │   └── SKILL.md
+    ├── steuer-soul-pflegen/
+    │   └── SKILL.md
+    ├── steuer-struktur-anlegen/
+    │   ├── SKILL.md
+    │   └── REFERENCE.md          # Lebensumstand → Anlage → Ordner
     ├── steuer-dokument-einsortieren/
     │   └── SKILL.md
     ├── steuer-transaktionen-kategorisieren/
     │   └── SKILL.md
-    ├── steuer-soul-pflegen/
+    ├── steuer-uebersicht/
     │   └── SKILL.md
     └── steuer-index-aktualisieren/
         └── SKILL.md
