@@ -1,6 +1,6 @@
 ---
 name: gh-issues-batch
-description: Implementiert alle offenen GitHub Issues eines Repositories vollautomatisch in einem Rutsch. Issues, die voneinander unabhängig sind, werden parallel über Subagents abgearbeitet; abhängige Issues laufen sequenziell. Jede Implementierung wird per `/tdd` test-getrieben entwickelt, über Playwright-MCP verifiziert, bei Fehlern mit `/diagnose` analysiert und nach Caveman-Prinzipien (`/caveman`) vereinfacht. Erfolgreiche Implementierungen werden committet, der User bekommt erst nach Abschluss aller Issues eine Sammelmeldung. Nutze diesen Skill IMMER, wenn der User sagt "implementiere alle issues", "alle gh issues", "issues aus github abarbeiten", "batch implementation", "parallel issues bearbeiten", "alle offenen tickets" oder ähnliches — auch ohne explizite Nennung von Playwright/TDD/Caveman, da diese Werkzeuge zum Standard-Workflow gehören.
+description: Implementiert alle offenen GitHub Issues eines Repositories vollautomatisch in einem Rutsch. Issues, die voneinander unabhängig sind, werden parallel über Subagents abgearbeitet; abhängige Issues laufen sequenziell. Jede Implementierung wird per `/tdd` test-getrieben entwickelt, über Playwright-MCP verifiziert, bei Fehlern mit `/diagnosing-bugs` analysiert und nach Caveman-Prinzipien (`/caveman`) vereinfacht. Erfolgreiche Implementierungen werden committet, der User bekommt erst nach Abschluss aller Issues eine Sammelmeldung. Nutze diesen Skill IMMER, wenn der User sagt "implementiere alle issues", "alle gh issues", "issues aus github abarbeiten", "batch implementation", "parallel issues bearbeiten", "alle offenen tickets" oder ähnliches — auch ohne explizite Nennung von Playwright/TDD/Caveman, da diese Werkzeuge zum Standard-Workflow gehören.
 ---
  
 # GitHub Issues Batch Implementer
@@ -48,10 +48,10 @@ Innerer Loop:
 1. **Read & Plan.** Issue-Body lesen, Akzeptanzkriterien extrahieren, Implementierungsplan in 3-7 Schritten skizzieren.
 2. **`/tdd` aufrufen.** Damit werden zuerst die Tests geschrieben, die die Akzeptanzkriterien abdecken. Tests sollen *rot* laufen.
 3. **Implementieren.** Minimal-Code schreiben, der die Tests grün macht. *Noch* nicht refaktorieren.
-4. **Unit-Tests laufen lassen.** Wenn rot → zurück zu Schritt 3. Maximal 5 Implementierungs-Iterationen, dann `/diagnose`.
+4. **Unit-Tests laufen lassen.** Wenn rot → zurück zu Schritt 3. Maximal 5 Implementierungs-Iterationen, dann `/diagnosing-bugs`.
 5. **`/caveman` aufrufen.** Code radikal vereinfachen — weniger Abstraktion, kürzere Funktionen, direkterer Pfad. Tests müssen grün bleiben.
 6. **Playwright-MCP Verifikation.** Falls UI-Touchpoint vorhanden (Issue-Label `ui`, `frontend`, `e2e` oder UI-Komponenten im Diff): End-to-End-Flow über Playwright-MCP durchspielen. Screenshots vergleichen wo sinnvoll. Bei nicht-UI-Issues (z.B. CLI-Tool, Backend-Service): Playwright entfällt, stattdessen entsprechende Integration-Tests laufen lassen.
-7. **Bei Fehler in 4 oder 6 → `/diagnose`.** Diagnose-Output lesen, gezielten Fix einbauen, Loop ab Schritt 4 wiederholen. Maximal 3 Diagnose-Runden pro Issue, dann das Issue als "blocked" markieren und überspringen.
+7. **Bei Fehler in 4 oder 6 → `/diagnosing-bugs`.** Diagnose-Output lesen, gezielten Fix einbauen, Loop ab Schritt 4 wiederholen. Maximal 3 Diagnose-Runden pro Issue, dann das Issue als "blocked" markieren und überspringen.
 8. **Commit.** Bei Erfolg: alle Änderungen stagen und committen.
 ### Commit-Format
  
@@ -105,7 +105,7 @@ Workflow:
 3. Implementierung → Tests grün
 4. /caveman → vereinfachen, Tests müssen grün bleiben
 5. Bei UI-Touchpoint: Playwright-MCP E2E-Verifikation
-6. Bei Fehlern: /diagnose, max. 3 Runden
+6. Bei Fehlern: /diagnosing-bugs, max. 3 Runden
 7. Commit mit "Closes #<NR>" im Body
  
 Liefere zurück: { "issue": <NR>, "status": "success"|"blocked", "commit_sha": "...", "blocker_reason": "..." }
@@ -120,7 +120,7 @@ Nach dem Sammeln aller parallelen Ergebnisse: serial-queue abarbeiten (im Hauptk
 Diese Commands werden vorausgesetzt und gehören zum Standard-Setup:
  
 - **`/tdd`** — Test-Driven-Development-Workflow. Schreibt zuerst failing Tests basierend auf Akzeptanzkriterien.
-- **`/diagnose`** — Fehleranalyse-Workflow. Liest Stack-Trace / Test-Output, identifiziert Root-Cause, schlägt gezielten Fix vor.
+- **`/diagnosing-bugs`** — Fehleranalyse-Workflow. Liest Stack-Trace / Test-Output, identifiziert Root-Cause, schlägt gezielten Fix vor.
 - **`/caveman`** — Code-Simplification-Workflow. "Make it dumb." Entfernt unnötige Abstraktion, kürzt Funktionen, reduziert Indirektion.
 Diese Commands existieren im User-Setup. Falls einer fehlt: einmal beim ersten Issue feststellen, dann im Final-Report melden ("`/caveman` nicht verfügbar, Simplification übersprungen") und stattdessen den entsprechenden Schritt manuell durchführen.
  
@@ -152,7 +152,7 @@ Batch abgeschlossen: <X> von <Y> Issues implementiert.
  
 ✗ Blocked:
   #173  E2E test schlägt fehl in Playwright, Element-Selector instabil
-        nach 3 /diagnose-Runden. Manueller Blick nötig.
+        nach 3 Diagnose-Runden. Manueller Blick nötig.
  
 Branches lokal, nicht gepusht. Soll ich PRs öffnen?
 ```

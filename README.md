@@ -2,7 +2,27 @@
 
 Eigene Skills für Claude, opencode und andere Coding-Agents.
 
-## Installation
+## Installation & Updates
+
+Ein Befehl installiert und aktualisiert *alle* Skills — die eigenen und die fremden:
+
+```bash
+./update-skills.sh
+```
+
+Das Script synchronisiert die in ihm eingetragenen Quellen und meldet am Ende Skills,
+die in keiner Quelle mehr vorkommen (z. B. weil sie upstream umbenannt wurden). Gelöscht
+wird nie automatisch.
+
+| Quelle | Was von dort kommt |
+| --- | --- |
+| `RATFIVE/SKILLS` | dieses Repo |
+| [`mattpocock/skills`](https://github.com/mattpocock/skills) | `engineering/` + `productivity/` |
+
+Eine weitere Quelle hinzufügen: eine Zeile im `SOURCES`-Array in [update-skills.sh](update-skills.sh).
+Ein Eintrag darf ein ganzes Repo, ein Kategorie-Ordner oder ein einzelner Skill sein.
+
+Nur dieses Repo installieren, ohne Script:
 
 ```bash
 npx skills@latest add RATFIVE/SKILLS
@@ -16,11 +36,16 @@ Code-zentrierte Skills für tägliche Entwicklungsarbeit.
 
 - **[gh-issues-batch](skills/engineering/gh-issues-batch/SKILL.md)** — Alle offenen GitHub Issues in einem Rutsch implementieren: parallele Subagents, TDD, Playwright-Verifikation, Caveman-Simplification.
 
+### Design
+
+- **[frontend-design-guide](skills/design/frontend-design-guide/SKILL.md)** — Frontend-Oberflächen mit echter gestalterischer Absicht bauen statt im generischen Web-Look.
+
 ### Productivity
 
 Allgemeine Workflow-Tools, nicht code-spezifisch.
 
-- **[notes-to-issues](skills/productivity/notes-to-issues/SKILL.md)** — Roh-Aufgaben aus `notes.md` durch `/grill-with-docs` → `/to-prd` → `/to-issue` Pipeline zu GitHub Issues verarbeiten.
+- **[notes-to-issues](skills/productivity/notes-to-issues/SKILL.md)** — Roh-Aufgaben aus `notes.md` durch `/grill-with-docs` → `/to-spec` → `/to-tickets` Pipeline zu GitHub Issues verarbeiten.
+- **[caveman](skills/productivity/caveman/SKILL.md)** — Ultra-komprimierter Antwortmodus: Füllwörter raus, technische Substanz bleibt. Wird von `gh-issues-batch` zur Code-Vereinfachung aufgerufen.
 
 ### Steuer
 
@@ -52,12 +77,18 @@ Einstiegspunkt ist **`steuer-init`**; die übrigen Skills rufen sich gegenseitig
 ## Struktur
 
 ```
+update-skills.sh        # installiert/aktualisiert alle Skills aus allen Quellen
 skills/
+├── design/             # Gestaltung
+│   └── frontend-design-guide/
+│       └── SKILL.md
 ├── engineering/        # Code-zentrierte Skills
 │   └── gh-issues-batch/
 │       └── SKILL.md
 ├── productivity/       # Allgemeine Workflow-Tools
-│   └── notes-to-issues/
+│   ├── notes-to-issues/
+│   │   └── SKILL.md
+│   └── caveman/
 │       └── SKILL.md
 └── steuer/             # Steuererklärung: Archiv aufbauen, Dokumente, Summen
     ├── steuer-init/
@@ -78,3 +109,12 @@ skills/
 ```
 
 Jeder Skill besteht aus einem Ordner mit `SKILL.md` (erforderlich) und optionalen `REFERENCE.md`, `EXAMPLES.md` oder `scripts/`.
+
+## Herkunft
+
+`skills/productivity/caveman` stammt ursprünglich aus [mattpocock/skills](https://github.com/mattpocock/skills)
+(MIT, Copyright © Matt Pocock) und wurde hier übernommen, nachdem er dort entfernt wurde —
+`gh-issues-batch` ruft ihn produktiv auf.
+
+Alle übrigen fremden Skills werden **nicht** kopiert, sondern von `update-skills.sh` direkt
+aus ihrer Originalquelle installiert.
