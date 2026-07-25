@@ -15,15 +15,11 @@ Arbeite die Schritte in dieser Reihenfolge ab. Lege pro Schritt ein Todo an.
 
 ### 1. Quellen erfassen
 
-Lies die Projektbeschreibung (`notes.md`, `README`, Konzeptdokumente) **und** alle vorhandenen Canvas-Dateien — auch Bilder, per Read-Tool.
-
-Prüfe bei jedem Canvas-Bild, ob es **ausgefüllt** oder eine **leere Methodenvorlage** ist. Leere Vorlagen liefern nur die Feldstruktur, die du füllen musst; ausgefüllte Canvas sind Behauptungen des Users, die du gegen die Recherche prüfst. Generische Platzhaltertexte in einem angeblich ausgefüllten Canvas („freelancers", „intuitive experience", „skilled teams") zählen als leer — und sind selbst ein Befund.
-
-**Fertig, wenn:** jede Datei im Canvas-Ordner gelesen und als ausgefüllt / leer / generisch eingeordnet ist.
+Lies die Projektbeschreibung (`notes.md`, `README`, Konzeptdokumente, Repository, Idee) **und** auch Bilder, per Read-Tool.
 
 ### 2. Fakten recherchieren, nicht erfragen
 
-Recherchiere selbst, was recherchierbar ist. Frage den User nichts, was im Web oder Dateisystem steht.
+Recherchiere selbst in einer tiefen Recherche, was recherchierbar ist. Frage den User nichts, was im Web oder Dateisystem steht.
 
 Pflichtmaterial:
 - **Wettbewerber je Petal-Feld**, mindestens fünf mit **konkretem Preis** — ohne Preise ist keine Positionierung möglich
@@ -38,13 +34,18 @@ Bevorzuge Primärquellen (Behörden, Gesetzestexte, Preisseiten der Anbieter). V
 
 ### 3. Offene Entscheidungen über `grilling` klären
 
-Bleibt nach der Recherche etwas offen, das den Report inhaltlich verändern würde, dann nutze den Skill `grilling` für die Rückfragen — eine Frage pro Runde, jeweils mit deiner Empfehlung.
+---
+name: grilling
+description: Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
+---
 
-(Der User kennt das als `/grill-me`; jener Skill ist nur handinvokierbar und startet ebenfalls `grilling`.)
+Interview me relentlessly about every aspect of this until we reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
 
-Fragen gehören hierhin, wenn verschiedene Antworten zu materiell verschiedenen Reports führen: Zielgruppen-Priorität, Preismodell, geografischer Markt, Risikobereitschaft bei regulatorischen Grauzonen. Fakten gehören nie hierhin.
+Ask the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering.
 
-Kann eine nicht-interaktive Session keine Antwort abwarten: arbeite die Fragen selbst mit Empfehlung durch, markiere sie im Report ausdrücklich als **offene Entscheidung** und sage dem User im Fazit, dass sie noch nicht getroffen ist.
+If a *fact* can be found by exploring the environment (filesystem, tools, etc.), look it up rather than asking me. The *decisions*, though, are mine — put each one to me and wait for my answer.
+
+Do not act on it until I confirm we have reached a shared understanding.
 
 **Fertig, wenn:** jede offene Entscheidung entweder beantwortet oder im Report als offen gekennzeichnet ist.
 
@@ -72,21 +73,25 @@ Der Report besteht aus diesen Teilen, in dieser Reihenfolge:
 1. **Titel** mit einer These als Überschrift — die Kernaussage, nicht „Wettbewerbsanalyse für X"
 2. **Kernbefund** — was funktioniert, was nicht, welcher Ausweg. Vor allen Details, in eigener Fläche abgesetzt
 3. **Marktbild** — 3–5 Kennzahlen
-4. **Petal Diagram** — die fünf Wettbewerbsfelder als Grafik
-5. **Anbietertabelle** — Name, Preis, Segment (direkt / indirekt / B2B), Modell. Sortiert nach Bedrohlichkeit
-6. **Positionierungsmatrix** — zwei Achsen, die in dieser Branche über Zahlungsbereitschaft entscheiden; die eigene Idee sichtbar hervorgehoben
-7. **Harte Fragen** — 8–12 Stück, je mit Schweregrad, „warum das wehtut" und einer Empfehlung
-8. **Product Market Fit** — ausgefüllt, als Diskussionsgrundlage gekennzeichnet
-9. **Bullseye** — Kanäle bewertet mit Testen / Später / Verwerfen
-10. **Nächste Schritte** — nummeriert, das Billigste und Entscheidendste zuerst
-11. **Hinweis** — geschäftliche Einschätzung, keine Rechts- oder Steuerberatung; Preisstand nennen
-12. **Quellen** — nummeriert, als klickbare Links, parteiische Quellen gekennzeichnet
+4. **Fazit** — in ein paar Sätze, die den Kernbefund zusammenfassen
+5. **Petal Diagram** — die fünf Wettbewerbsfelder als Grafik
+6. **Anbietertabelle** — Name, Preis, Segment (direkt / indirekt / B2B), Modell. Sortiert nach Bedrohlichkeit
+7. **Positionierungsmatrix** — zwei Achsen, die in dieser Branche über Zahlungsbereitschaft entscheiden; die eigene Idee sichtbar hervorgehoben
+8. **Harte Fragen** — 8–12 Stück, je mit Schweregrad, „warum das wehtut" und einer Empfehlung
+9. **Product Market Fit** — ausgefüllt, als Diskussionsgrundlage gekennzeichnet
+10. **Bullseye** — Kanäle bewertet mit Testen / Später / Verwerfen
+11. **Nächste Schritte** — nummeriert, das Billigste und Entscheidendste zuerst
+12. **Hinweis** — geschäftliche Einschätzung, keine Rechts- oder Steuerberatung; Preisstand nennen
+13. **Quellen** — nummeriert, als klickbare Links, parteiische Quellen gekennzeichnet
 
 Schweregrade der harten Fragen: **Show-Stopper** (entscheidet, ob überhaupt gebaut wird), **Hoch** (entscheidet, was gebaut wird), **Mittel** (entscheidet, wie gebaut wird). Show-Stopper stehen oben.
 
-Dateiname `wettbewerbsanalyse.html`, abgelegt neben den Canvas-Quellen.
+Dateiname `wettbewerbsanalyse.html`, abgelegt in /docs oder wenn dieses Verzeichnis nicht vorhanden ist dann im root.
 
-**Fertig, wenn:** alle zwölf Teile vorhanden sind und jede harte Frage einen Schweregrad und eine Empfehlung hat.
+**Verwende eine einfach und verstädändliche Sprache**
+
+
+**Fertig, wenn:** alle dreizehn Teile vorhanden sind und jede harte Frage einen Schweregrad und eine Empfehlung hat.
 
 ### 6. Im Browser verifizieren
 
