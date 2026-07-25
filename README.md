@@ -40,6 +40,12 @@ Code-zentrierte Skills für tägliche Entwicklungsarbeit.
 
 - **[frontend-design-guide](skills/design/frontend-design-guide/SKILL.md)** — Frontend-Oberflächen mit echter gestalterischer Absicht bauen statt im generischen Web-Look.
 
+### Business
+
+Skills für Geschäftsmodell- und Marktarbeit, nicht code-spezifisch.
+
+- **[wettbewerbsanalyse](skills/business/wettbewerbsanalyse/SKILL.md)** — Geschäftsidee gegen den Markt prüfen und als HTML-Report ausliefern: Wettbewerber und Preise recherchieren, die sechs Canvas-Frameworks (Petal Diagram, Value Proposition, Kundenprofil, Product Market Fit, Business Model Canvas, Bullseye) füllen, harte Fragen mit Schweregrad stellen. Offene Entscheidungen gehen per `grilling` an den User. Diagramm-Geometrie in seiner [REFERENCE.md](skills/business/wettbewerbsanalyse/REFERENCE.md).
+
 ### Productivity
 
 Allgemeine Workflow-Tools, nicht code-spezifisch.
@@ -79,6 +85,10 @@ Einstiegspunkt ist **`steuer-init`**; die übrigen Skills rufen sich gegenseitig
 ```
 update-skills.sh        # installiert/aktualisiert alle Skills aus allen Quellen
 skills/
+├── business/           # Geschäftsmodell & Markt
+│   └── wettbewerbsanalyse/
+│       ├── SKILL.md
+│       └── REFERENCE.md         # Petal-Geometrie, Positionierungsmatrix
 ├── design/             # Gestaltung
 │   └── frontend-design-guide/
 │       └── SKILL.md
