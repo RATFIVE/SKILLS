@@ -34,7 +34,7 @@ npx skills@latest add RATFIVE/SKILLS
 
 Code-zentrierte Skills für tägliche Entwicklungsarbeit.
 
-- **[gh-issues-batch](skills/engineering/gh-issues-batch/SKILL.md)** — Alle offenen GitHub Issues in einem Rutsch implementieren: parallele Subagents, TDD, Playwright-Verifikation, Caveman-Simplification.
+- **[gh-ticket-batch](skills/engineering/gh-ticket-batch/SKILL.md)** — Alle offenen GitHub-Tickets in einem Rutsch implementieren: ein Subagent pro Ticket (unabhängige parallel, abhängige nacheinander), TDD, Playwright-Verifikation, Caveman-Simplification.
 
 ### Design
 
@@ -51,7 +51,7 @@ Skills für Geschäftsmodell- und Marktarbeit, nicht code-spezifisch.
 Allgemeine Workflow-Tools, nicht code-spezifisch.
 
 - **[notes-to-tickets](skills/productivity/notes-to-tickets/SKILL.md)** — Roh-Aufgaben aus `notes.md`/`NOTES.md` durch `/grill-with-docs` → `/to-spec` → `/to-tickets` Pipeline zu einem Spec-Issue mit Tickets verarbeiten (mit Checkpoints für Grilling, Test-Seams und Ticket-Schnitt).
-- **[caveman](skills/productivity/caveman/SKILL.md)** — Ultra-komprimierter Antwortmodus: Füllwörter raus, technische Substanz bleibt. Wird von `gh-issues-batch` zur Code-Vereinfachung aufgerufen.
+- **[caveman](skills/productivity/caveman/SKILL.md)** — Ultra-komprimierter Antwortmodus: Füllwörter raus, technische Substanz bleibt. Wird von `gh-ticket-batch` zur Code-Vereinfachung aufgerufen.
 
 ### Steuer
 
@@ -93,7 +93,7 @@ skills/
 │   └── frontend-design-guide/
 │       └── SKILL.md
 ├── engineering/        # Code-zentrierte Skills
-│   └── gh-issues-batch/
+│   └── gh-ticket-batch/
 │       └── SKILL.md
 ├── productivity/       # Allgemeine Workflow-Tools
 │   ├── notes-to-tickets/
@@ -124,7 +124,7 @@ Jeder Skill besteht aus einem Ordner mit `SKILL.md` (erforderlich) und optionale
 
 `skills/productivity/caveman` stammt ursprünglich aus [mattpocock/skills](https://github.com/mattpocock/skills)
 (MIT, Copyright © Matt Pocock) und wurde hier übernommen, nachdem er dort entfernt wurde —
-`gh-issues-batch` ruft ihn produktiv auf.
+`gh-ticket-batch` ruft ihn produktiv auf.
 
 Alle übrigen fremden Skills werden **nicht** kopiert, sondern von `update-skills.sh` direkt
 aus ihrer Originalquelle installiert.
