@@ -50,7 +50,7 @@ Skills für Geschäftsmodell- und Marktarbeit, nicht code-spezifisch.
 
 Allgemeine Workflow-Tools, nicht code-spezifisch.
 
-- **[notes-to-issues](skills/productivity/notes-to-issues/SKILL.md)** — Roh-Aufgaben aus `notes.md`/`NOTES.md` durch `/grill-with-docs` → `/to-spec` → `/to-tickets` Pipeline zu GitHub Issues verarbeiten.
+- **[notes-to-tickets](skills/productivity/notes-to-tickets/SKILL.md)** — Roh-Aufgaben aus `notes.md`/`NOTES.md` durch `/grill-with-docs` → `/to-spec` → `/to-tickets` Pipeline zu einem Spec-Issue mit Tickets verarbeiten (mit Checkpoints für Grilling, Test-Seams und Ticket-Schnitt).
 - **[caveman](skills/productivity/caveman/SKILL.md)** — Ultra-komprimierter Antwortmodus: Füllwörter raus, technische Substanz bleibt. Wird von `gh-issues-batch` zur Code-Vereinfachung aufgerufen.
 
 ### Steuer
@@ -96,7 +96,7 @@ skills/
 │   └── gh-issues-batch/
 │       └── SKILL.md
 ├── productivity/       # Allgemeine Workflow-Tools
-│   ├── notes-to-issues/
+│   ├── notes-to-tickets/
 │   │   └── SKILL.md
 │   └── caveman/
 │       └── SKILL.md
