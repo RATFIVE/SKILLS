@@ -15,7 +15,7 @@ Arbeite die Schritte in dieser Reihenfolge ab. Lege pro Schritt ein Todo an.
 
 ### 1. Quellen erfassen
 
-Lies die Projektbeschreibung (`notes.md`, `README`, Konzeptdokumente, Repository, Idee) **und** auch Bilder, per Read-Tool.
+Lies die Projektbeschreibung (`notes.md`/`NOTES.md`, `README`, Konzeptdokumente, Repository, Idee) **und** auch Bilder, per Read-Tool.
 
 ### 2. Fakten recherchieren, nicht erfragen
 
