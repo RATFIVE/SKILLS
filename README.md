@@ -46,6 +46,12 @@ Skills für Geschäftsmodell- und Marktarbeit, nicht code-spezifisch.
 
 - **[wettbewerbsanalyse](skills/business/wettbewerbsanalyse/SKILL.md)** — Geschäftsidee gegen den Markt prüfen und als HTML-Report ausliefern: Wettbewerber und Preise recherchieren, die sechs Canvas-Frameworks (Petal Diagram, Value Proposition, Kundenprofil, Product Market Fit, Business Model Canvas, Bullseye) füllen, harte Fragen mit Schweregrad stellen. Offene Entscheidungen gehen per `grilling` an den User. Diagramm-Geometrie in seiner [REFERENCE.md](skills/business/wettbewerbsanalyse/REFERENCE.md).
 
+### Finanzen
+
+- **[aktien-analyse](skills/finanzen/aktien-analyse/SKILL.md)** — Multi-Agent-Analyse für einen Aktien-Ticker: Technik-, News-, Fundamental- und Makro-Analyst, Faktencheck der Zahlen, Bull/Bear-Debatte mit Risk-Check, am Ende BUY/SELL/HOLD mit Entry, Stop und Positionsgröße. Daten per yfinance über [scripts/fetch_market_data.py](skills/finanzen/aktien-analyse/scripts/fetch_market_data.py); läuft mit Subagents (Claude Code, Code-Tab) und ohne (Chat), mit Websuche als Notlösung bei gesperrtem Netz. Rollen-Briefings in seiner [ROLLEN.md](skills/finanzen/aktien-analyse/ROLLEN.md).
+
+> LLM-Analyse auf Basis öffentlicher Daten, keine Anlageberatung.
+
 ### Productivity
 
 Allgemeine Workflow-Tools, nicht code-spezifisch.
@@ -95,6 +101,12 @@ skills/
 ├── engineering/        # Code-zentrierte Skills
 │   └── gh-ticket-batch/
 │       └── SKILL.md
+├── finanzen/           # Aktien & Märkte
+│   └── aktien-analyse/
+│       ├── SKILL.md
+│       ├── ROLLEN.md             # Briefings der zehn Rollen
+│       └── scripts/
+│           └── fetch_market_data.py
 ├── productivity/       # Allgemeine Workflow-Tools
 │   ├── notes-to-tickets/
 │   │   └── SKILL.md
@@ -125,6 +137,10 @@ Jeder Skill besteht aus einem Ordner mit `SKILL.md` (erforderlich) und optionale
 `skills/productivity/caveman` stammt ursprünglich aus [mattpocock/skills](https://github.com/mattpocock/skills)
 (MIT, Copyright © Matt Pocock) und wurde hier übernommen, nachdem er dort entfernt wurde —
 `gh-ticket-batch` ruft ihn produktiv auf.
+
+`skills/finanzen/aktien-analyse` adaptiert Pipeline und Datenskript aus
+[lucemia/trading-agents-plugin](https://github.com/lucemia/trading-agents-plugin)
+(MIT, Copyright © 2026 David Chen).
 
 Alle übrigen fremden Skills werden **nicht** kopiert, sondern von `update-skills.sh` direkt
 aus ihrer Originalquelle installiert.
