@@ -24,7 +24,7 @@ Lege pro Schritt ein Todo an und arbeite sie in dieser Reihenfolge ab.
 
 | Umgebung | Erkennbar an | `$BASE` |
 | --- | --- | --- |
-| Rechner des Users (Claude Code CLI, Code-Tab) | Home-Verzeichnis des Users erreichbar, meist macOS | `~/trading-analysen` |
+| Rechner des Users (Claude Code CLI, Code-Tab) | Home-Verzeichnis des Users erreichbar, meist macOS | `~/Documents/aktien-analyse-claude/analysen` (Git-Repo des Users; Ordner nicht neu anlegen, falls das Repo fehlt, sondern nachfragen) |
 | Cowork mit verbundenem Ordner | ein vom User verbundener Ordner | `<verbundener Ordner>/trading-analysen` |
 | Chat-Sandbox, Cowork ohne Ordner | keins von beidem | ein Arbeitsordner in der Sandbox |
 
