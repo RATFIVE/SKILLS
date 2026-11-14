@@ -1,1 +1,2 @@
-*.heapsnapshot
+*.heapsnapshot.impeccable/hook.cache.json
+.impeccable/config.local.json

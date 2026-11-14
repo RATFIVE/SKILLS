@@ -40,6 +40,7 @@ Code-zentrierte Skills für tägliche Entwicklungsarbeit.
 
 - **[frontend-design-guide](skills/design/frontend-design-guide/SKILL.md)** — Frontend-Oberflächen mit echter gestalterischer Absicht bauen statt im generischen Web-Look.
 - **[motion-video](skills/design/motion-video/SKILL.md)** — Kurze Erklärvideos, Werbespots und Teaser als MP4: JavaScript-Motion-Graphics mit freigestellten KI-Bildern (GPT Image), ElevenLabs-Sprecherstimme, Animationen per Wort-Zeitstempel auf dem gesprochenen Wort, Sounddesign auf -14 bis -16 LUFS. Rendert über Higgsfield Katana oder lokal mit HyperFrames (Bilder über kie.ai, fal.ai oder Higgsfield); der gewählte Weg wird in `praeferenzen.md` neben dem Skill gemerkt.
+- **[website-bauen](skills/design/website-bauen/SKILL.md)** — Website in neun Phasen von Marke bis Livegang: Marke messen oder Name und Logo finden, Recherche mit DataForSEO (Keywords, Google, ChatGPT), Texte vor dem Design, Design-Richtung und Abnahme über impeccable, statischer Bau mit strukturierten Daten, Cookie-/AGB-Prüfung, Upload und Nachmessen. Stand in `WEBSITE-STATUS.md` im Projekt; Aufruf `/website-bauen start | weiter | phase <n> | status`. Phasen in [phasen/](skills/design/website-bauen/phasen/), Vorlagen und Prüfskripte daneben.
 
 ### Business
 
@@ -99,8 +100,14 @@ skills/
 ├── design/             # Gestaltung
 │   ├── frontend-design-guide/
 │   │   └── SKILL.md
-│   └── motion-video/
-│       └── SKILL.md
+│   ├── motion-video/
+│   │   └── SKILL.md
+│   └── website-bauen/
+│       ├── SKILL.md
+│       ├── schreibregeln.md
+│       ├── phasen/               # eine Datei pro Phase (0–8)
+│       ├── vorlagen/             # Statusdatei, robots/llms/sitemap, Formular, Build, Regler-Panel
+│       └── werkzeuge/            # marke_auslesen.py, pruefen.py
 ├── engineering/        # Code-zentrierte Skills
 │   └── gh-ticket-batch/
 │       └── SKILL.md
@@ -144,6 +151,10 @@ Jeder Skill besteht aus einem Ordner mit `SKILL.md` (erforderlich) und optionale
 `skills/finanzen/aktien-analyse` adaptiert Pipeline und Datenskript aus
 [lucemia/trading-agents-plugin](https://github.com/lucemia/trading-agents-plugin)
 (MIT, Copyright © 2026 David Chen).
+
+`skills/design/website-bauen` ist eine unveränderte Kopie von
+[Julian-Ivanov/website-bauen](https://github.com/Julian-Ivanov/website-bauen) (Stand `ee7c4cb`,
+9. Oktober 2026). Updates von dort von Hand übernehmen.
 
 Alle übrigen fremden Skills werden **nicht** kopiert, sondern von `update-skills.sh` direkt
 aus ihrer Originalquelle installiert.

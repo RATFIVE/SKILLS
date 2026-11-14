@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "files": [
+          "skills/design/website-bauen/vorlagen/anfrage-email.html"
+        ],
+        "createdAt": "2026-11-14T20:05:55.993Z",
+        "reason": "Claude: HTML-Mail-Vorlage, E-Mail-Clients brauchen websichere Schriften wie Arial; unveränderte Upstream-Kopie"
+      }
+    ]
+  }
+}
