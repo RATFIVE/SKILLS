@@ -39,6 +39,7 @@ Code-zentrierte Skills für tägliche Entwicklungsarbeit.
 ### Design
 
 - **[frontend-design-guide](skills/design/frontend-design-guide/SKILL.md)** — Frontend-Oberflächen mit echter gestalterischer Absicht bauen statt im generischen Web-Look.
+- **[motion-video](skills/design/motion-video/SKILL.md)** — Kurze Erklärvideos, Werbespots und Teaser als MP4: JavaScript-Motion-Graphics mit freigestellten KI-Bildern (GPT Image), ElevenLabs-Sprecherstimme, Animationen per Wort-Zeitstempel auf dem gesprochenen Wort, Sounddesign auf -14 bis -16 LUFS. Rendert über Higgsfield Katana oder lokal mit HyperFrames (Bilder über kie.ai, fal.ai oder Higgsfield); der gewählte Weg wird in `praeferenzen.md` neben dem Skill gemerkt.
 
 ### Business
 
@@ -96,7 +97,9 @@ skills/
 │       ├── SKILL.md
 │       └── REFERENCE.md         # Petal-Geometrie, Positionierungsmatrix
 ├── design/             # Gestaltung
-│   └── frontend-design-guide/
+│   ├── frontend-design-guide/
+│   │   └── SKILL.md
+│   └── motion-video/
 │       └── SKILL.md
 ├── engineering/        # Code-zentrierte Skills
 │   └── gh-ticket-batch/
