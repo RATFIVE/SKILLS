@@ -58,7 +58,7 @@ Skills für Geschäftsmodell- und Marktarbeit, nicht code-spezifisch.
 
 Allgemeine Workflow-Tools, nicht code-spezifisch.
 
-- **[notes-to-tickets](skills/productivity/notes-to-tickets/SKILL.md)** — Roh-Aufgaben aus `notes.md`/`NOTES.md` durch `/grill-with-docs` → `/to-spec` → `/to-tickets` Pipeline zu einem Spec-Issue mit Tickets verarbeiten (mit Checkpoints für Grilling, Test-Seams und Ticket-Schnitt).
+- **[notes-to-tickets](skills/productivity/notes-to-tickets/SKILL.md)** — Roh-Aufgaben aus der explizit genannten `NOTES.md` oder `TODO.md` durch `/grill-with-docs` → `/to-spec` → `/to-tickets` Pipeline zu einem Spec-Issue mit Tickets verarbeiten (mit Checkpoints für Grilling, Test-Seams und Ticket-Schnitt).
 - **[caveman](skills/productivity/caveman/SKILL.md)** — Ultra-komprimierter Antwortmodus: Füllwörter raus, technische Substanz bleibt. Wird von `gh-ticket-batch` zur Code-Vereinfachung aufgerufen.
 
 ### Steuer

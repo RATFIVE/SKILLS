@@ -1,13 +1,17 @@
 ---
 name: notes-to-tickets
-description: Verarbeitet die in `notes.md` bzw. `NOTES.md` gesammelten Aufgaben durch die komplette Pipeline `/grill-with-docs` → `/to-spec` → `/to-tickets`, sodass aus Roh-Notizen am Ende ein Spec-Issue und veröffentlichte Tickets im Issue-Tracker werden. Nutze diesen Skill IMMER, wenn der User auf `notes.md` oder `NOTES.md` verweist und sagt "implementiere notes.md", "implementiere NOTES.md", "notes durch die pipeline", "notes zu issues", "notes zu tickets", "@notes.md abarbeiten", "@NOTES.md abarbeiten", "issues aus notes", "tickets aus notes" oder ähnliches — auch wenn er nur einen Teil der Slash-Commands nennt, da `/grill-with-docs`, `/to-spec` und `/to-tickets` zum Standard-Workflow gehören. Auch triggern, wenn der User einfach `@notes.md` oder `@NOTES.md` ohne weitere Erklärung droppt. **Rückfragen laufen über die Checkpoints der Pipeline** — erst das Grilling, dann die Checkpoints von `/to-spec` und `/to-tickets`; dazwischen keine eigenen Fragen.
+description: Verarbeitet die in einer Aufgaben-Datei (`NOTES.md` oder `TODO.md`, Groß-/Kleinschreibung egal) gesammelten Aufgaben durch die komplette Pipeline `/grill-with-docs` → `/to-spec` → `/to-tickets`, sodass aus Roh-Notizen am Ende ein Spec-Issue und veröffentlichte Tickets im Issue-Tracker werden. Verarbeitet wird die Datei, die der User explizit nennt. Nutze diesen Skill IMMER, wenn der User auf `notes.md`/`NOTES.md` oder `todo.md`/`TODO.md` verweist und sagt "implementiere TODO.md", "notes durch die pipeline", "notes zu issues", "todo zu tickets", "@NOTES.md abarbeiten", "tickets aus todo" oder ähnliches — auch wenn er nur einen Teil der Slash-Commands nennt, da `/grill-with-docs`, `/to-spec` und `/to-tickets` zum Standard-Workflow gehören. Auch triggern, wenn der User einfach `@NOTES.md` oder `@TODO.md` ohne weitere Erklärung droppt. **Rückfragen laufen über die Checkpoints der Pipeline** — erst das Grilling, dann die Checkpoints von `/to-spec` und `/to-tickets`; dazwischen keine eigenen Fragen.
 ---
  
 # Notes-to-Tickets Pipeline
  
-Verarbeitung von Roh-Aufgaben aus der Notes-Datei zu veröffentlichten Tickets im Issue-Tracker. Der User gibt *eine* Anweisung, beantwortet die Fragen an den Checkpoints der Pipeline — und bekommt am Ende die Issue-Links.
+Verarbeitung von Roh-Aufgaben aus der Quelldatei zu veröffentlichten Tickets im Issue-Tracker. Der User gibt *eine* Anweisung, beantwortet die Fragen an den Checkpoints der Pipeline — und bekommt am Ende die Issue-Links.
 
-**Notes-Datei:** `notes.md` und `NOTES.md` sind gleichwertig. Gemeint ist immer die Datei, die im Projekt tatsächlich existiert. Im Folgenden steht `$NOTES` für ihren echten Dateinamen.
+**Quelldatei:** Verarbeitet wird die Datei, die der User explizit nennt — `NOTES.md` oder `TODO.md` (bzw. `notes.md`/`todo.md`), per `@`-Verweis oder im Text. Im Folgenden steht `$NOTES` für ihren echten Dateinamen bzw. Pfad.
+
+- **User nennt eine Datei** → genau diese nehmen, auch wenn daneben weitere Aufgaben-Dateien liegen. Die andere nicht mitlesen, nicht zusammenführen.
+- **User nennt keine Datei** (z. B. nur "notes durch die pipeline") → nur dann selbst wählen, wenn im Workdir genau eine Kandidatin existiert. Bei mehreren (etwa `NOTES.md` *und* `TODO.md`) den User fragen, welche gemeint ist.
+- Ein Wort wie "notes" oder "todo" im Auftrag zählt als Nennung der passenden Datei ("todos zu tickets" → `TODO.md`).
 
 **Pipeline-Skills von Matt Pocock:** `/grill-with-docs`, `/to-spec` und `/to-tickets` stammen aus [mattpocock/skills](https://github.com/mattpocock/skills) und sind mit `disable-model-invocation: true` markiert — das Skill-Tool kann sie nicht aufrufen. Stattdessen ihre `SKILL.md` lesen und den Anweisungen darin exakt folgen:
 
@@ -26,7 +30,7 @@ cat $SKILLS/to-spec/SKILL.md
    - bei `/to-spec`, wenn die **Test-Seams** bestätigt werden,
    - bei `/to-tickets`, wenn der **Ticket-Schnitt** (Granularität, Blocking-Edges) freigegeben wird.
    Darüber hinaus keine eigenen Zwischenfragen und keine Statusmeldungen. Status nur intern als TodoList.
-3. **Notes-Datei ist Single Source of Truth.** Alles, was verarbeitet wird, kommt aus der Notes-Datei und den Antworten im Grilling. Keine eigenen Aufgaben dazu erfinden, keine "schlauen" Ergänzungen.
+3. **Quelldatei ist Single Source of Truth.** Alles, was verarbeitet wird, kommt aus der Quelldatei und den Antworten im Grilling. Keine eigenen Aufgaben dazu erfinden, keine "schlauen" Ergänzungen.
 4. **Spec ist Zwischenergebnis, kein Deliverable.** `/to-spec` veröffentlicht den Spec als Issue — er ist Parent und Input für `/to-tickets`, wird aber nicht groß zelebriert.
 5. **Failure isoliert.** Wenn eine Stage scheitert, sauberer Stopp mit klarem Bericht, was bis wohin lief. Nicht "irgendwie weitermachen".
 6. **Doku vor Frage.** Bevor im Grilling eine Frage an den User geht: prüfen, ob `GLOSSARY.md` oder `docs/adr/` sie schon beantworten. Nur fragen, was die Doku nicht hergibt.
@@ -36,12 +40,13 @@ cat $SKILLS/to-spec/SKILL.md
 ### Phase 1: Notes einlesen & sanity-check
  
 ```bash
-NOTES=$(ls | grep -ixF 'notes.md')   # echter Dateiname: notes.md oder NOTES.md
-[ -n "$NOTES" ] || { echo "notes.md / NOTES.md fehlt"; exit 1; }
+GENANNT='TODO.md'                       # vom User genannte Datei (oder notes.md, NOTES.md …)
+NOTES=$(ls | grep -ixF "$GENANNT")      # echter Dateiname, Groß-/Kleinschreibung egal
+[ -n "$NOTES" ] || { echo "$GENANNT fehlt"; exit 1; }
 wc -l $NOTES
 ```
 
-Liefert `grep` zwei Treffer (beide Varianten existieren, nur auf case-sensitiven Dateisystemen möglich): beide Dateien lesen und als eine gemeinsame Notes-Quelle behandeln.
+Hat der User einen Pfad genannt (z. B. `docs/TODO.md`), diesen direkt verwenden. Liefert `grep` zwei Treffer (z. B. `todo.md` und `TODO.md`, nur auf case-sensitiven Dateisystemen möglich): beide Dateien lesen und als eine gemeinsame Quelle behandeln.
 
 Lies `$NOTES` einmal komplett. Prüfe:
  
@@ -106,11 +111,11 @@ Spec: #141  https://github.com/<org>/<repo>/issues/141
  
 Knapp. Keine Erklärungen, was die Pipeline gemacht hat — der User weiß das.
  
-## Notes-Datei nach erfolgreicher Pipeline
+## Quelldatei nach erfolgreicher Pipeline
  
 **Default:** `$NOTES` nicht anfassen. Der User entscheidet selbst, ob er die abgearbeiteten Aufgaben löscht oder als History stehen lässt.
  
-**Ausnahme:** Wenn der User explizit "notes leeren nach pipeline" oder ähnlich gesagt hat, am Ende:
+**Ausnahme:** Wenn der User explizit "notes leeren nach pipeline", "todo leeren" oder ähnlich gesagt hat, am Ende:
  
 ```bash
 : > $NOTES
@@ -135,28 +140,29 @@ Falls einer der Skills fehlt: Pipeline an dieser Stelle abbrechen und im Report 
 
 Nur bei diesen Stop-Kriterien. Vorher prüfen, ob `GLOSSARY.md` / `docs/adr/` die Antwort schon liefern:
 
-- **Weder `notes.md` noch `NOTES.md` existiert** im aktuellen Workdir → User fragen, wo die Datei liegt.
+- **Die genannte Datei existiert nicht** im aktuellen Workdir → User fragen, wo sie liegt. Nicht stillschweigend auf die andere Aufgaben-Datei ausweichen.
+- **Keine Datei genannt und mehrere Kandidatinnen** (`NOTES.md` und `TODO.md`) → User fragen, welche gemeint ist.
 - **Repo nicht für Matts Skills eingerichtet** → User bitten, `/setup-matt-pocock-skills` laufen zu lassen.
 - **Repo nicht clean / kein Git-Repo** → Ist der erwartete Repo-Zustand (Branch, Working-Tree-Status) in `docs/adr/` dokumentiert, dem folgen. Sonst User fragen.
 - **`gh` nicht authentifiziert** (bei GitHub als Tracker) → User auffordern, `gh auth login` zu laufen.
-- **Die Notes-Datei enthält offensichtlich Secrets** (API-Keys, Passwörter, Tokens — Pattern wie `sk_live_`, `ghp_`, `AKIA`, längere base64-Blocks): Stop, melden, **nicht** durch die Pipeline schieben. Sonst landet das Secret in Issues und damit potenziell öffentlich.
+- **Die Quelldatei enthält offensichtlich Secrets** (API-Keys, Passwörter, Tokens — Pattern wie `sk_live_`, `ghp_`, `AKIA`, längere base64-Blocks): Stop, melden, **nicht** durch die Pipeline schieben. Sonst landet das Secret in Issues und damit potenziell öffentlich.
 
 ## Edge Cases
  
-- **Pipeline aus der Notes-Datei mit nur einer einzigen Aufgabe:** Trotzdem volle Pipeline durchlaufen. `/to-tickets` produziert dann eben nur 1 Ticket, das ist OK.
+- **Pipeline aus der Quelldatei mit nur einer einzigen Aufgabe:** Trotzdem volle Pipeline durchlaufen. `/to-tickets` produziert dann eben nur 1 Ticket, das ist OK.
 - **Grilling bringt nichts Neues (Plan war schon klar):** Kein Fehler — direkt weiter zu Phase 3.
-- **`/to-spec` produziert einen Spec ohne User Stories:** Behandeln wie Fehler in Phase 3 — stoppen, Report. Wahrscheinlich war die Notes-Datei zu vage und das Grilling zu kurz.
+- **`/to-spec` produziert einen Spec ohne User Stories:** Behandeln wie Fehler in Phase 3 — stoppen, Report. Wahrscheinlich war die Quelldatei zu vage und das Grilling zu kurz.
 - **User lehnt den Ticket-Schnitt mehrfach ab:** Gehört zu Checkpoint 3 — iterieren, bis der User freigibt. Kein Abbruch.
 - **Issues sollen in einem anderen Repo landen als dem aktuellen Workdir:** Nicht automatisch lösen. User hat den Skill in einem bestimmten Repo getriggert — das ist das Ziel-Repo. Wenn der User vorher explizit ein anderes Repo genannt hat, das berücksichtigen, sonst Default.
-- **User wirft Pipeline ein zweites Mal an, ohne die Notes-Datei geändert zu haben:** Trotzdem volle Pipeline durchlaufen. Es ist nicht Aufgabe des Skills zu raten, ob der User das versehentlich macht — Duplikate sind möglich, der User hat es zweimal angewiesen.
+- **User wirft Pipeline ein zweites Mal an, ohne die Quelldatei geändert zu haben:** Trotzdem volle Pipeline durchlaufen. Es ist nicht Aufgabe des Skills zu raten, ob der User das versehentlich macht — Duplikate sind möglich, der User hat es zweimal angewiesen.
 
 ## Anti-Patterns
  
 - **NICHT** zusätzlich zu den drei Checkpoints eigene Fragen stellen ("soll ich den Spec so veröffentlichen?"). Die Checkpoints der Pipeline-Skills reichen.
 - **NICHT** die Checkpoints überspringen — weder das Grilling noch die Seam-Bestätigung noch die Freigabe des Ticket-Schnitts.
-- **NICHT** Phase 2, 3 oder 4 mit eigenem Inhalt anreichern. Nichts dazudichten, was weder in der Notes-Datei stand noch im Grilling geklärt wurde.
+- **NICHT** Phase 2, 3 oder 4 mit eigenem Inhalt anreichern. Nichts dazudichten, was weder in der Quelldatei stand noch im Grilling geklärt wurde.
 - **NICHT** einen Pipeline-Skill aus dem Gedächtnis nachbauen. Immer die aktuelle `SKILL.md` lesen — Matt ändert die Skills regelmäßig.
 - **NICHT** Issues mit "Generated by Claude" / "Co-Authored-By: Claude" o.ä. tagging, außer der User hat das explizit gewünscht.
-- **NICHT** die Notes-Datei automatisch leeren oder löschen, außer explizit angewiesen.
+- **NICHT** die Quelldatei automatisch leeren oder löschen, außer explizit angewiesen.
 - **NICHT** nach jeder Phase einen Zwischenstatus posten. Außerhalb der Checkpoints Stille bis zum Final Report.
 - **NICHT** direkt auf `main` committen (z. B. Glossar-/ADR-Änderungen aus dem Grilling) — immer auf dem aktiven Branch committen (`git branch --show-current` prüfen). Kein `git push` ohne explizite Anweisung des Users.
