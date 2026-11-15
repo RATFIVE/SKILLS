@@ -17,6 +17,8 @@ SOURCES=(
   "RATFIVE/SKILLS"
   "https://github.com/mattpocock/skills/tree/main/skills/engineering"
   "https://github.com/mattpocock/skills/tree/main/skills/productivity"
+  "Julian-Ivanov/website-bauen"
+  "Motionsites-AI/claude-skill"
 )
 
 AGENTS=(claude-code opencode)
@@ -74,10 +76,16 @@ skills_in_source() {
 
   # ([^/]*/)* erlaubt beliebig viele Zwischenebenen — auch null, wenn die Quelle
   # direkt auf einen Skill zeigt (…/find-skills/SKILL.md).
+  # Liegt SKILL.md im Repo-Root (z. B. Julian-Ivanov/website-bauen), gibt es keinen
+  # Ordnernamen — dann gilt der Repo-Name als Skill-Name.
   gh api "repos/${repo}/git/trees/HEAD?recursive=1" --jq '.tree[].path' 2>/dev/null |
     { grep -E "^${prefix}([^/]*/)*SKILL\.md$" || true; } |
     while IFS= read -r path; do
-      basename "$(dirname "$path")"
+      if [ "$path" = "SKILL.md" ]; then
+        basename "$repo"
+      else
+        basename "$(dirname "$path")"
+      fi
     done
 }
 
