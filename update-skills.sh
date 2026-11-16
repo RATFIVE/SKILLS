@@ -19,6 +19,7 @@ SOURCES=(
   "https://github.com/mattpocock/skills/tree/main/skills/productivity"
   "Julian-Ivanov/website-bauen"
   "Motionsites-AI/claude-skill"
+  "Barty-Bart/motion-graphics"
 )
 
 AGENTS=(claude-code opencode)
