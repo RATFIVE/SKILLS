@@ -43,6 +43,7 @@ Code-zentrierte Skills für tägliche Entwicklungsarbeit.
 
 - **[frontend-design-guide](skills/design/frontend-design-guide/SKILL.md)** — Frontend-Oberflächen mit echter gestalterischer Absicht bauen statt im generischen Web-Look.
 - **[motion-video](skills/design/motion-video/SKILL.md)** — Kurze Erklärvideos, Werbespots und Teaser als MP4: JavaScript-Motion-Graphics mit freigestellten KI-Bildern (GPT Image), ElevenLabs-Sprecherstimme, Animationen per Wort-Zeitstempel auf dem gesprochenen Wort, Sounddesign auf -14 bis -16 LUFS. Rendert über Higgsfield Katana oder lokal mit HyperFrames (Bilder über kie.ai, fal.ai oder Higgsfield); der gewählte Weg wird in `praeferenzen.md` neben dem Skill gemerkt.
+- **[teach-video](skills/design/teach-video/SKILL.md)** — `/teach` als Erklärvideo statt HTML-Lektion: 60–120 s, eine Kernidee am Beispiel aus der eigenen Mission, Abruffragen mit echter Denkpause, Abschlusstafel mit Primärquelle. Teilt sich Kursordner und Lernstand mit `/teach`. Stimme (ElevenLabs v4) und Musik über Higgsfield, Effekte aus `sound-effects`, Wort-Zeitstempel lokal mit faster-whisper, Motion Graphics aus Code, lokal gerendert mit Playwright und ffmpeg, gemischt auf -16 LUFS. Braucht die Skills `teach`, `motion-video` und `sound-effects`; die Werkzeuge richtet [scripts/setup.sh](skills/design/teach-video/scripts/setup.sh) in `~/.cache/teach-video` ein.
 
 ### Business
 
