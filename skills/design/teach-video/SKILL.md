@@ -29,7 +29,7 @@ Lies vor dem ersten Schritt zwei Dateien vollständig. Sie liegen als Geschwiste
 ```
 videos/NNNN-<name>.mp4         fertiges Video (eigene Nummernfolge, unabhängig von lessons/)
 videos/NNNN-<name>.md          Sprechertext, Quellen mit Links, Abruffragen mit Antworten, Hinweis auf Rückfragen
-videos/src/NNNN-<name>/        skript.txt, voice.mp3, voice-final.wav, music.mp3, words.json/.js,
+videos/src/NNNN-<name>/        skript.txt, voice.mp3, voice-final.flac, music.mp3, words.json/.js,
                                kit.js, seite.html, cues.json, bild.mp4: genug, um ohne neue Kosten neu zu rendern
 ```
 
@@ -38,12 +38,12 @@ videos/src/NNNN-<name>/        skript.txt, voice.mp3, voice-final.wav, music.mp3
 1. **Kursordner und Thema.** Wie bei `/teach`: Mission lesen oder erfragen, Lernstand aus `learning-records/` ableiten, Thema der Einheit festlegen. Quellen recherchieren und in `RESOURCES.md` pflegen. Fertig, wenn Kernidee, Beispiel und Primärquelle feststehen und jede Behauptung im geplanten Text eine Quelle hat.
 2. **Werkzeuge.** `bash scripts/setup.sh` aus diesem Skill-Ordner. Fertig bei der Zeile `teach-video bereit: <Ordner>`. Bei `FEHLT:` dem User den genannten Befehl nennen.
 3. **Sprechertext.** Schreib `skript.txt`: reiner Text, keine Regieanweisungen, keine eckigen Klammern. Zeig ihn im Chat mit Wortzahl und geschätzter Dauer (≈ 2,3 Wörter/s). **Der User gibt ihn frei**, erst danach entstehen Kosten. Fertig bei ausdrücklicher Freigabe.
-4. **Stimme und Budget**, siehe [Higgsfield](#higgsfield). Steht in `NOTES.md` des Kurses schon `teach-video: voice_id … budget …`, nimm beides ohne Rückfrage. Sonst: Kostenschätzung für Proben, Stimme und Musik nennen, Freigabe holen, 2–3 Stimmproben mit einem kurzen Satz aus dem Skript erzeugen (mit Fachbegriffen), User wählt, `voice_id`, Modell und freigegebenes Budget pro Video in `NOTES.md` schreiben. Liegt eine Schätzung über dem Budget, vorher fragen.
+4. **Stimme und Budget**, siehe [Higgsfield](#higgsfield). Steht in `NOTES.md` des Kurses schon `teach-video: voice_id … budget …`, nimm beides ohne Rückfrage. Sonst: Kostenschätzung für Proben, Stimme und Musik nennen, Freigabe holen, 2–3 Stimmproben mit einem kurzen Satz aus dem Skript erzeugen (mit Fachbegriffen), die Proben laden, öffnen und jede ohne Hilfe von Whisper abschreiben lassen (falsch erkannte Fachbegriffe deuten auf einen Akzent hin), dem User beides zeigen. User wählt, `voice_id`, Modell und freigegebenes Budget pro Video in `NOTES.md` schreiben. Liegt eine Schätzung über dem Budget, vorher fragen.
 5. **Ton erzeugen.** Stimme (das ganze Skript in einem Stück) und Musik parallel erzeugen, als `voice.mp3` und `music.mp3` in `videos/src/NNNN-<name>/` laden.
-6. **Zeitstempel.** `<TEACH_VIDEO_HOME>/venv/bin/python scripts/align.py voice.mp3 skript.txt <src> --pause "<letzte Wörter der Abruffrage>=4"` (eine `--pause` je Abruffrage). Fertig, wenn keine WARNUNG zur Wortzahl kommt. Kommt eine, die Aufnahme gegen das Skript prüfen.
+6. **Zeitstempel.** `<TEACH_VIDEO_HOME>/venv/bin/python scripts/align.py voice.mp3 skript.txt <src> --hotwords "<Fachbegriffe>" --pause "<letzte Wörter der Abruffrage>=4"` (eine `--pause` je Abruffrage). Fertig, wenn keine WARNUNG zur Wortzahl kommt. Kommt eine, die Aufnahme gegen das Skript prüfen.
 7. **Seite bauen.** `assets/kit.js` und `assets/template.html` (als `seite.html`) in den src-Ordner kopieren und die Szenen schreiben. Die Kit-API steht oben in `kit.js`. Jede Zeit kommt aus `Kit.at('wort')`, jede Szene hat ihre eigene visuelle Idee, der Hintergrund bewegt sich durchgehend. `cues.json` für die Effekte schreiben (Format in `scripts/mix.mjs`): Effekte nur auf Akzenten wie Szenenwechsel, Enthüllung oder Antwort, nicht bei jedem Wort.
 8. **Prüfen vor dem Rendern.** `node scripts/render.mjs seite.html kontakt.png --stills auto` (Zeiten in `VIDEO.stills`, mindestens ein Bild pro Szene) und den Kontaktbogen ansehen. Fertig, wenn kein Text abgeschnitten ist, sich nichts überlappt, alles lesbar ist und jede Szene das zeigt, was in dem Moment gesprochen wird.
-9. **Rendern und mischen.** `node scripts/render.mjs seite.html bild.mp4`, dann `node scripts/mix.mjs --video bild.mp4 --words words.json --voice voice-final.wav --music music.mp3 --cues cues.json --out <kurs>/videos/NNNN-<name>.mp4`. Fertig, wenn die letzte Zeile I ≈ -16 LUFS und True Peak ≤ -1 dBFS meldet.
+9. **Rendern und mischen.** `node scripts/render.mjs seite.html bild.mp4`, dann `node scripts/mix.mjs --video bild.mp4 --words words.json --voice voice-final.flac --music music.mp3 --cues cues.json --out <kurs>/videos/NNNN-<name>.mp4`. Fertig, wenn die letzte Zeile I ≈ -16 LUFS und True Peak ≤ -1 dBFS meldet. Danach `bild.mp4` und die Kontaktbögen löschen, sie lassen sich jederzeit neu erzeugen.
 10. **Abschluss.** Die Begleitdatei `videos/NNNN-<name>.md` schreiben. Einen vorhandenen Spickzettel in `reference/` um neue Begriffe ergänzen. Das Video mit `open` öffnen. Die tatsächlichen Higgsfield-Kosten nennen. Dann die Abruffragen aus dem Video im Chat stellen. Ein Lerneintrag entsteht erst, wenn der User sie richtig beantwortet: Ansehen ist Abdeckung, kein Lernen.
 
 ## Higgsfield
@@ -59,7 +59,7 @@ videos/src/NNNN-<name>/        skript.txt, voice.mp3, voice-final.wav, music.mp3
 | Datei | Zweck |
 |---|---|
 | `scripts/setup.sh` | Einrichtung von faster-whisper und playwright in `$TEACH_VIDEO_HOME` (Standard `~/.cache/teach-video`), außerhalb des Skill-Ordners, damit Updates nichts löschen |
-| `scripts/align.py` | Wort-Zeitstempel in Videozeit und Denkpausen, erzeugt `voice-final.wav` und `words.js` |
+| `scripts/align.py` | Wort-Zeitstempel in Videozeit und Denkpausen, erzeugt `voice-final.flac` und `words.js` |
 | `scripts/render.mjs` | Seite → stummes MP4 oder Kontaktbogen |
 | `scripts/mix.mjs` | Stimme, Musik (abgesenkt unter der Stimme) und Effekte → fertiges MP4 auf -16 LUFS, mit Messung am Ergebnis |
 | `assets/kit.js` | Zeitleiste für die Seite: `Kit.at`, `Kit.fade`, `Kit.type`, Vorschau im Browser |

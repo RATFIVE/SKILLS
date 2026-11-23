@@ -3,7 +3,7 @@
 
    Kit.video({ duration, w: 1920, h: 1080, stills: { name: [t, ...] } })
        setzt window.VIDEO und window.seek. Ohne ?render in der Adresse spielt die Seite als Vorschau
-       ab (Leertaste: Pause, Pfeiltasten: ±2 s, voice-final.wav im selben Ordner läuft mit).
+       ab (Leertaste: Pause, Pfeiltasten: ±2 s, voice-final.flac im selben Ordner läuft mit).
    Kit.scene(t => { ... })      registriert eine Szene; seek(t) ruft alle Szenen mit t auf.
    Kit.at('runs-on')            Videozeit (s), zu der das Wort gesprochen wird (aus window.WORDS).
    Kit.at('jobs laufen', 2)     zweites Vorkommen; mehrere Wörter = aufeinanderfolgende Wörter.
@@ -71,7 +71,7 @@
         if (stage) { stage.style.transformOrigin = '0 0'; stage.style.transform = 'scale(' + s + ')'; }
       };
       addEventListener('resize', fit); fit();
-      var audio = new Audio('voice-final.wav'), t0 = performance.now(), off = 0, paused = false;
+      var audio = new Audio('voice-final.flac'), t0 = performance.now(), off = 0, paused = false;
       var now = function () { return paused ? off : off + (performance.now() - t0) / 1000; };
       var sync = function () {
         audio.currentTime = Math.max(0, now() - W.voiceAt);

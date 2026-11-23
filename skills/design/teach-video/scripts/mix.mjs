@@ -1,5 +1,5 @@
 // mix.mjs: legt Stimme, Musik und Soundeffekte unter das stumme Video und normalisiert auf -16 LUFS.
-//   node mix.mjs --video bild.mp4 --words words.json --voice voice-final.wav [--music music.mp3] [--cues cues.json]
+//   node mix.mjs --video bild.mp4 --words words.json --voice voice-final.flac [--music music.mp3] [--cues cues.json]
 //                [--music-db -20] --out video.mp4
 // Die Stimme beginnt bei words.json.voiceAt Sekunden (von align.py gesetzt), dieselbe Zeitbasis wie die Seite.
 // Musik wird geloopt oder gekürzt, ein- und ausgeblendet und unter der Stimme abgesenkt (Sidechain).

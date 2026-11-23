@@ -1,7 +1,7 @@
 """align.py: Wort-Zeitstempel aus der fertigen Sprachaufnahme.
 
     <venv>/bin/python align.py voice.mp3 skript.txt out_dir [--offset 1.0] [--pause "auf einem Runner?=4"]
-                               [--model medium] [--lang de]
+                               [--hotwords "runs-on needs Runner"] [--model medium] [--lang de]
 
 Schreibt out_dir/words.json und out_dir/words.js (window.WORDS = {...}) mit
 {"voiceAt": offset, "voiceDuration": sek, "words": [{"w": "Wort", "s": start, "e": ende}, ...]}.
@@ -9,10 +9,11 @@ Alle Zeiten sind Videozeit: Die Stimme beginnt bei --offset Sekunden, und mix.mj
 genau dorthin. So gibt es nur eine Stelle, an der der Versatz steht.
 --pause "<letzte Wörter vor der Pause>=<Sekunden>" (mehrfach möglich) fügt nach diesen Wörtern Stille
 ein, z. B. als Denkpause nach einer Abruffrage; alle späteren Zeitstempel wandern mit.
-Ergebnis immer: out_dir/voice-final.wav (die Stimme, die gemischt und in der Vorschau gespielt wird).
-Der Sprechertext geht als initial_prompt hinein, damit Fachbegriffe (runs-on, needs …)
-so geschrieben werden wie im Skript. Das Modell wird aus dem Hugging-Face-Cache genommen
-und nur geladen, wenn es dort fehlt.
+Ergebnis immer: out_dir/voice-final.flac (die Stimme, die gemischt und in der Vorschau gespielt wird).
+--hotwords: Fachbegriffe, die Whisper bevorzugt so schreiben soll. Den Sprechertext NICHT als
+initial_prompt übergeben: Dann hält Whisper ihn für schon gehört und überspringt bis zur Hälfte
+der Aufnahme (am 23.11.2026 gemessen: 62 statt 127 Wörter). Das Skript dient nur dem Abgleich der
+Wortzahl. Das Modell wird aus dem Hugging-Face-Cache genommen und nur geladen, wenn es dort fehlt.
 """
 import argparse
 import warnings
@@ -33,6 +34,7 @@ ap.add_argument("--model", default="medium")
 ap.add_argument("--lang", default="de")
 ap.add_argument("--offset", type=float, default=1.0)
 ap.add_argument("--pause", action="append", default=[])
+ap.add_argument("--hotwords", default=None)
 a = ap.parse_args()
 
 text = open(a.script, encoding="utf-8").read().strip()
@@ -41,7 +43,7 @@ segments, info = model.transcribe(
     a.audio,
     language=a.lang,
     word_timestamps=True,
-    initial_prompt=text[:800],
+    hotwords=a.hotwords,
     vad_filter=False,
     condition_on_previous_text=True,
 )
@@ -74,7 +76,7 @@ for spec in a.pause:
     cuts.append(((last["e"] + nxt) / 2 - a.offset, float(secs)))
 cuts.sort()
 
-final = os.path.join(a.out_dir, "voice-final.wav")
+final = os.path.join(a.out_dir, "voice-final.flac")
 if cuts:
     parts, labels, prev = [], [], 0.0
     for i, (c, secs) in enumerate(cuts):
@@ -86,13 +88,13 @@ if cuts:
     labels.append(f"[a{len(cuts)}]")
     pre = [f"{l}aformat=sample_rates=48000:channel_layouts=stereo[f{j}]" for j, l in enumerate(labels)]
     graph = ";".join(parts + pre) + ";" + "".join(f"[f{j}]" for j in range(len(labels))) + f"concat=n={len(labels)}:v=0:a=1[out]"
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", a.audio, "-filter_complex", graph, "-map", "[out]", final], check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", a.audio, "-filter_complex", graph, "-map", "[out]", "-ac", "1", final], check=True)
     for w in words:
         shift = sum(secs for c, secs in cuts if w["s"] - a.offset > c)
         w["s"] = round(w["s"] + shift, 3)
         w["e"] = round(w["e"] + shift, 3)
 else:
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", a.audio, "-ar", "48000", "-ac", "2", final], check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", a.audio, "-ar", "48000", "-ac", "1", final], check=True)
 
 data = {"voiceAt": a.offset, "voiceDuration": round(info.duration + sum(s for _, s in cuts), 3), "words": words}
 with open(os.path.join(a.out_dir, "words.json"), "w", encoding="utf-8") as f:
