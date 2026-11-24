@@ -21,6 +21,7 @@ wird nie automatisch.
 | [`Julian-Ivanov/website-bauen`](https://github.com/Julian-Ivanov/website-bauen) | `website-bauen` |
 | [`Motionsites-AI/claude-skill`](https://github.com/Motionsites-AI/claude-skill) | `motionsites-web-builder` |
 | [`Barty-Bart/motion-graphics`](https://github.com/Barty-Bart/motion-graphics) | `motion-broll`, `object-separation`, `explainer-default`, `explainer-engaging`, `explainer-high-energy`, `sound-effects` |
+| [`cloudflare/security-audit-skill`](https://github.com/cloudflare/security-audit-skill) | `security-audit` |
 
 Eine weitere Quelle hinzufügen: eine Zeile im `SOURCES`-Array in [update-skills.sh](update-skills.sh).
 Ein Eintrag darf ein ganzes Repo, ein Kategorie-Ordner oder ein einzelner Skill sein.

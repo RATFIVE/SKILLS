@@ -20,6 +20,7 @@ SOURCES=(
   "Julian-Ivanov/website-bauen"
   "Motionsites-AI/claude-skill"
   "Barty-Bart/motion-graphics"
+  "cloudflare/security-audit-skill"
 )
 
 AGENTS=(claude-code opencode)
