@@ -6,6 +6,12 @@ export type Snapshot = {
   hasUnknownPrice: boolean
 }
 
+export type Limit = {
+  kind: string
+  percentUsed: number
+  resetsAt: string | null
+}
+
 export type Totals = {
   input: number
   cacheRead: number
@@ -20,6 +26,7 @@ declare module 'claude-code' {
       snapshot: Shaped<Snapshot | null>
       totals: Shaped<Totals>
       history: Shaped<number[]>
+      limits: Shaped<Limit[]>
       turnStartUsd: number | null
       isHidden: boolean
     }

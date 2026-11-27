@@ -1,1 +1,1 @@
-{ "name": "token-anzeige", "version": "0.1.0", "description": "Zeigt Kontextfenster, Tokenverbrauch und geschätzte Kosten der Sitzung über dem Prompt", "types": "./types/index.d.ts" }
+{ "name": "token-anzeige", "version": "0.2.0", "description": "Zeigt Kontextfenster, Tokenverbrauch, geschätzte Kosten und die Nutzungslimits des Abos über dem Prompt", "types": "./types/index.d.ts" }

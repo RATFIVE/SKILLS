@@ -1,7 +1,7 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
-import type { Snapshot, Totals } from '../types'
+import type { Limit, Snapshot, Totals } from '../types'
 
 const PANE = 'verbrauch'
 const EMPTY: Totals = { input: 0, cacheRead: 0, cacheWrite: 0, output: 0, requests: 0 }
@@ -9,6 +9,7 @@ const EMPTY: Totals = { input: 0, cacheRead: 0, cacheWrite: 0, output: 0, reques
 const snapshot = atom({ plugin: 'token-anzeige', key: 'snapshot' } as const, null, { shape: 'snapshot-1' })
 const totals = atom({ plugin: 'token-anzeige', key: 'totals' } as const, EMPTY, { shape: 'totals-1' })
 const history = atom({ plugin: 'token-anzeige', key: 'history' } as const, [], { shape: 'history-1' })
+const limits = atom({ plugin: 'token-anzeige', key: 'limits' } as const, [], { shape: 'limits-1' })
 const turnStartUsd = atom({ plugin: 'token-anzeige', key: 'turnStartUsd' } as const, null)
 const isHidden = atom({ plugin: 'token-anzeige', key: 'isHidden' } as const, false)
 
@@ -70,9 +71,41 @@ function sparkline(values: number[], width: number) {
     .join('')
 }
 
+// Nutzungslimits des Abos
+const LIMIT_LABEL: Record<string, string> = { five_hour: '5 Std.', seven_day: 'Woche', spend_limit: 'Ausgaben' }
+const LIMIT_TITLE: Record<string, string> = {
+  five_hour: 'Aktuelles Limit (5 Std.)',
+  seven_day: 'Wochenlimit',
+  spend_limit: 'Ausgabenlimit',
+}
+const LIMIT_ORDER = ['five_hour', 'seven_day', 'spend_limit']
+const pct = (n: number) => `${n.toFixed(Number.isInteger(n) ? 0 : 1).replace('.', ',')} %`
+
+function sortLimits(list: Limit[]) {
+  const rank = (k: string) => (LIMIT_ORDER.indexOf(k) + 1 || 99)
+  return [...list].sort((a, b) => rank(a.kind) - rank(b.kind))
+}
+
+// „in 2 Std. 14 Min.“ bzw. „Fr. 14:00“ ab einem Tag Abstand
+function resetText(iso: string | null, now: number) {
+  if (!iso) return ''
+  const at = Date.parse(iso)
+  if (Number.isNaN(at)) return ''
+  const mins = Math.max(0, Math.round((at - now) / 60_000))
+  if (mins < 60) return `in ${mins} Min.`
+  if (mins < 24 * 60) return `in ${Math.floor(mins / 60)} Std. ${mins % 60} Min.`
+  const d = new Date(at)
+  const day = ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'][d.getDay()]
+  return `${day} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+}
+
 async function readUsage($: EngineInterface): Promise<Snapshot> {
   const u = await $.session.usage()
   const tokens = u.context.tokens ?? 0
+  const next: Limit[] = sortLimits(
+    u.rateLimits.map(l => ({ kind: l.kind, percentUsed: l.percentUsed, resetsAt: l.resetsAt ?? null })),
+  )
+  await update($, limits, () => next)
   return {
     contextTokens: tokens,
     window: u.context.window,
@@ -126,6 +159,15 @@ export const register: Register = on => {
     return result
   })
 
+  on('session.measure', async ($, e, next) => {
+    if (e.changed.includes('rateLimits')) {
+      await update($, limits, () =>
+        sortLimits(e.rateLimits.map(l => ({ kind: l.kind, percentUsed: l.percentUsed, resetsAt: l.resetsAt ?? null }))),
+      )
+    }
+    return next(e)
+  })
+
   on('turn.complete', async ($, e, next) => {
     const result = await next(e)
     await refresh($)
@@ -154,11 +196,13 @@ export const register: Register = on => {
     if (!s) return next(e)
     const t = await read($, totals)
     const start = await read($, turnStartUsd)
+    const lim = await read($, limits)
     const { Box, Text } = $.ui.resolve(e)
 
     const cols = e.props.bodyColumns
     const showTokens = cols >= 84
     const showBar = cols >= 52
+    const showLimits = lim.length > 0 && cols >= 70
     const delta = s.usd !== null && start !== null ? s.usd - start : 0
     const sep = <Text color={TRACK}> │ </Text>
 
@@ -188,6 +232,17 @@ export const register: Register = on => {
           </Text>
         )}
         {s.usd !== null && delta >= 0.005 && <Text dimColor> +{usd(delta)}</Text>}
+        {showLimits && sep}
+        {showLimits &&
+          lim.map((l, i) => (
+            <Text>
+              {i > 0 && <Text color={TRACK}> · </Text>}
+              <Text dimColor>{LIMIT_LABEL[l.kind] ?? l.kind} </Text>
+              <Text color={heat(l.percentUsed / 100)} bold>
+                {pct(l.percentUsed)}
+              </Text>
+            </Text>
+          ))}
       </Box>
     )
   })
@@ -199,6 +254,8 @@ export const register: Register = on => {
     const t = await read($, totals)
     const hist = await read($, history)
     const start = await read($, turnStartUsd)
+    const lim = await read($, limits)
+    const now = await $.clock.now()
     const width = Math.max(20, Math.min(60, e.props.bodyColumns - 4))
 
     if (!s) return <Text dimColor>Noch keine Daten – nach der nächsten Anfrage geht es los.</Text>
@@ -247,6 +304,30 @@ export const register: Register = on => {
             <Text dimColor>Verlauf </Text>
             <Text color={ACCENT}>{sparkline(hist, width - 8)}</Text>
           </Text>
+        )}
+        <Text> </Text>
+
+        {heading('NUTZUNGSLIMITS', 'Abo')}
+        {lim.length === 0 ? (
+          <Text dimColor>Keine Limitdaten – nur mit Abo und nach der ersten Antwort.</Text>
+        ) : (
+          lim.map(l => (
+            <Box flexDirection="column">
+              <Box width={width} justifyContent="space-between">
+                <Text>{LIMIT_TITLE[l.kind] ?? l.kind}</Text>
+                <Text dimColor>{l.resetsAt ? `Reset ${resetText(l.resetsAt, now)}` : ' '}</Text>
+              </Box>
+              <Box>
+                {gradientBar(l.percentUsed, width - 8).map(r => (
+                  <Text color={r.color}>{r.text}</Text>
+                ))}
+                <Text color={heat(l.percentUsed / 100)} bold>
+                  {' '}
+                  {pct(l.percentUsed).padStart(7)}
+                </Text>
+              </Box>
+            </Box>
+          ))
         )}
         <Text> </Text>
 

@@ -10,6 +10,8 @@ Ein Befehl installiert und aktualisiert *alle* Skills — die eigenen und die fr
 ./update-skills.sh
 ```
 
+Die [Mods](#mods) dieses Repos kommen über ein eigenes Script, siehe dort.
+
 Das Script synchronisiert die in ihm eingetragenen Quellen und meldet am Ende Skills,
 die in keiner Quelle mehr vorkommen (z. B. weil sie upstream umbenannt wurden). Gelöscht
 wird nie automatisch.
@@ -94,15 +96,31 @@ Einstiegspunkt ist **`steuer-init`**; die übrigen Skills rufen sich gegenseitig
 
 ## Mods
 
-Mods verändern Claude Code selbst (Anzeigen, Panels, Befehle) statt nur Anweisungen mitzugeben. Jeder Mod liegt in `mods/<name>/` und ist zugleich ein Skill-Ordner mit `SKILL.md`: `update-skills.sh` installiert ihn deshalb wie jeden Skill nach `~/.claude/skills/<name>`, und von dort lädt Claude Code ihn in jeder Sitzung. Nach dem ersten Update einmal neu starten oder `/reload-plugins` eingeben.
+Mods verändern Claude Code selbst (Anzeigen, Panels, Befehle) statt nur Anweisungen mitzugeben. Sie sind Claude-Code-Plugins, laufen nur dort und werden deshalb nicht von `update-skills.sh` installiert, sondern von:
 
-- **[token-anzeige](mods/token-anzeige/SKILL.md)** — Über dem Prompt eine Zeile mit Kontextfenster (Farbverlauf-Balken und Prozent), verbrauchten Tokens und geschätzten Kosten der Sitzung; `/verbrauch` öffnet ein Panel mit Kontextverlauf, Tokens nach Art und Kosten des letzten Turns. `/verbrauch aus` bzw. `an` blendet die Zeile aus und ein.
+```bash
+./update-mods.sh
+```
+
+Das Repo ist ein Plugin-Marketplace namens `ratfive-mods` ([.claude-plugin/marketplace.json](.claude-plugin/marketplace.json)). Das Script trägt ihn beim ersten Lauf ein, installiert jeden dort gelisteten Mod und aktualisiert ihn später. Wie bei den Skills kommt der Stand von GitHub, also erst committen und pushen. Laufende Sitzungen übernehmen ein Update mit `/reload-plugins`. Installierte Mods, die nicht mehr im Marketplace stehen, meldet das Script, entfernt sie aber nicht.
+
+Neuer Mod: Ordner `mods/<name>/` anlegen und in `marketplace.json` eintragen. Mod geändert: `version` in seiner `.claude-plugin/plugin.json` erhöhen, sonst sieht Claude Code kein Update.
+
+Einen einzelnen Mod ohne Script installieren:
+
+```bash
+claude plugin install token-anzeige --marketplace RATFIVE/SKILLS
+```
+
+- **[token-anzeige](mods/token-anzeige/SKILL.md)** — Über dem Prompt eine Zeile mit Kontextfenster (Farbverlauf-Balken und Prozent), verbrauchten Tokens, geschätzten Kosten der Sitzung und den Nutzungslimits des Abos (aktuelles 5-Stunden-Limit und Wochenlimit); `/verbrauch` öffnet ein Panel mit Kontextverlauf, Limits samt Reset-Zeitpunkt, Tokens nach Art und Kosten des letzten Turns. `/verbrauch aus` bzw. `an` blendet die Zeile aus und ein.
 
 ## Struktur
 
 ```
-update-skills.sh        # installiert/aktualisiert alle Skills und Mods aus allen Quellen
-mods/                   # Claude-Code-Mods (zugleich Skill-Ordner)
+update-skills.sh        # installiert/aktualisiert alle Skills aus allen Quellen
+update-mods.sh          # installiert/aktualisiert die Mods dieses Repos
+.claude-plugin/marketplace.json  # macht das Repo zum Marketplace für die Mods
+mods/                   # Claude-Code-Mods (Plugins)
 └── token-anzeige/
     ├── SKILL.md
     ├── .claude-plugin/plugin.json

@@ -1,0 +1,12 @@
+{
+  "name": "ratfive-mods",
+  "description": "Claude-Code-Mods aus RATFIVE/SKILLS",
+  "owner": { "name": "RATFIVE" },
+  "plugins": [
+    {
+      "name": "token-anzeige",
+      "source": "./mods/token-anzeige",
+      "description": "Kontextfenster, Tokens, Kosten und Nutzungslimits (5 Std., Woche) über dem Prompt und im Panel /verbrauch"
+    }
+  ]
+}
