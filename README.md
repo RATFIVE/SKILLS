@@ -63,6 +63,7 @@ Skills für Geschäftsmodell- und Marktarbeit, nicht code-spezifisch.
 Allgemeine Workflow-Tools, nicht code-spezifisch.
 
 - **[notes-to-tickets](skills/productivity/notes-to-tickets/SKILL.md)** — Roh-Aufgaben aus der explizit genannten `NOTES.md` oder `TODO.md` durch `/grill-with-docs` → `/to-spec` → `/to-tickets` Pipeline zu einem Spec-Issue mit Tickets verarbeiten (mit Checkpoints für Grilling, Test-Seams und Ticket-Schnitt).
+- **[token-anzeige](skills/productivity/token-anzeige/SKILL.md)** — Claude-Code-Mod statt reinem Skill: Über dem Prompt steht eine Zeile mit Kontextfenster (Farbverlauf-Balken und Prozent), verbrauchten Tokens und geschätzten Kosten der Sitzung; `/verbrauch` öffnet ein Panel mit Kontextverlauf, Tokens nach Art und Kosten des letzten Turns. `update-skills.sh` legt den Ordner nach `~/.claude/skills/`, von dort lädt Claude Code den Mod in jeder Sitzung (danach einmal neu starten oder `/reload-plugins`).
 - **[caveman](skills/productivity/caveman/SKILL.md)** — Ultra-komprimierter Antwortmodus: Füllwörter raus, technische Substanz bleibt. Wird von `gh-ticket-batch` zur Code-Vereinfachung aufgerufen.
 
 ### Steuer
@@ -118,8 +119,13 @@ skills/
 ├── productivity/       # Allgemeine Workflow-Tools
 │   ├── notes-to-tickets/
 │   │   └── SKILL.md
-│   └── caveman/
-│       └── SKILL.md
+│   ├── caveman/
+│   │   └── SKILL.md
+│   └── token-anzeige/            # Claude-Code-Mod
+│       ├── SKILL.md
+│       ├── .claude-plugin/plugin.json
+│       ├── hooks/register.tsx
+│       └── types/index.d.ts
 └── steuer/             # Steuererklärung: Archiv aufbauen, Dokumente, Summen
     ├── steuer-init/
     │   └── SKILL.md
