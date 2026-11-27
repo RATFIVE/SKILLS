@@ -2,6 +2,8 @@
 
 Eigene Skills für Claude, opencode und andere Coding-Agents.
 
+Wann welcher Skill dran ist, in welcher Reihenfolge und mit Beispielen: [TUTORIAL.md](TUTORIAL.md).
+
 ## Installation & Updates
 
 Ein Befehl installiert und aktualisiert *alle* Skills — die eigenen und die fremden:
