@@ -63,7 +63,6 @@ Skills für Geschäftsmodell- und Marktarbeit, nicht code-spezifisch.
 Allgemeine Workflow-Tools, nicht code-spezifisch.
 
 - **[notes-to-tickets](skills/productivity/notes-to-tickets/SKILL.md)** — Roh-Aufgaben aus der explizit genannten `NOTES.md` oder `TODO.md` durch `/grill-with-docs` → `/to-spec` → `/to-tickets` Pipeline zu einem Spec-Issue mit Tickets verarbeiten (mit Checkpoints für Grilling, Test-Seams und Ticket-Schnitt).
-- **[token-anzeige](skills/productivity/token-anzeige/SKILL.md)** — Claude-Code-Mod statt reinem Skill: Über dem Prompt steht eine Zeile mit Kontextfenster (Farbverlauf-Balken und Prozent), verbrauchten Tokens und geschätzten Kosten der Sitzung; `/verbrauch` öffnet ein Panel mit Kontextverlauf, Tokens nach Art und Kosten des letzten Turns. `update-skills.sh` legt den Ordner nach `~/.claude/skills/`, von dort lädt Claude Code den Mod in jeder Sitzung (danach einmal neu starten oder `/reload-plugins`).
 - **[caveman](skills/productivity/caveman/SKILL.md)** — Ultra-komprimierter Antwortmodus: Füllwörter raus, technische Substanz bleibt. Wird von `gh-ticket-batch` zur Code-Vereinfachung aufgerufen.
 
 ### Steuer
@@ -93,10 +92,23 @@ Einstiegspunkt ist **`steuer-init`**; die übrigen Skills rufen sich gegenseitig
 
 > Vorsortierung, keine steuerliche Beratung.
 
+## Mods
+
+Mods verändern Claude Code selbst (Anzeigen, Panels, Befehle) statt nur Anweisungen mitzugeben. Jeder Mod liegt in `mods/<name>/` und ist zugleich ein Skill-Ordner mit `SKILL.md`: `update-skills.sh` installiert ihn deshalb wie jeden Skill nach `~/.claude/skills/<name>`, und von dort lädt Claude Code ihn in jeder Sitzung. Nach dem ersten Update einmal neu starten oder `/reload-plugins` eingeben.
+
+- **[token-anzeige](mods/token-anzeige/SKILL.md)** — Über dem Prompt eine Zeile mit Kontextfenster (Farbverlauf-Balken und Prozent), verbrauchten Tokens und geschätzten Kosten der Sitzung; `/verbrauch` öffnet ein Panel mit Kontextverlauf, Tokens nach Art und Kosten des letzten Turns. `/verbrauch aus` bzw. `an` blendet die Zeile aus und ein.
+
 ## Struktur
 
 ```
-update-skills.sh        # installiert/aktualisiert alle Skills aus allen Quellen
+update-skills.sh        # installiert/aktualisiert alle Skills und Mods aus allen Quellen
+mods/                   # Claude-Code-Mods (zugleich Skill-Ordner)
+└── token-anzeige/
+    ├── SKILL.md
+    ├── .claude-plugin/plugin.json
+    ├── hooks/register.tsx        # der Mod
+    ├── types/index.d.ts          # Typen der gespeicherten Werte
+    └── tests/anzeige.test.tsx
 skills/
 ├── business/           # Geschäftsmodell & Markt
 │   └── wettbewerbsanalyse/
@@ -119,13 +131,8 @@ skills/
 ├── productivity/       # Allgemeine Workflow-Tools
 │   ├── notes-to-tickets/
 │   │   └── SKILL.md
-│   ├── caveman/
-│   │   └── SKILL.md
-│   └── token-anzeige/            # Claude-Code-Mod
-│       ├── SKILL.md
-│       ├── .claude-plugin/plugin.json
-│       ├── hooks/register.tsx
-│       └── types/index.d.ts
+│   └── caveman/
+│       └── SKILL.md
 └── steuer/             # Steuererklärung: Archiv aufbauen, Dokumente, Summen
     ├── steuer-init/
     │   └── SKILL.md
